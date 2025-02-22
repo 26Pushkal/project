@@ -3,7 +3,7 @@ FROM node:14
 
 RUN groupadd -r admin2 && useradd -r -g admin2 admin2
 
-USER myuser
+USER admin2
 
 # Set the working directory in the container
 WORKDIR /app
