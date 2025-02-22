@@ -1,0 +1,28 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - master  # Trigger the workflow on push to the 'master' branch
+  pull_request:
+    branches:
+      - master  # Trigger the workflow on pull requests to the 'master' branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 1: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t check-nodejs .
+
+      
+          
+     
+      
