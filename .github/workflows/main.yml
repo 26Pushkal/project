@@ -33,7 +33,30 @@ jobs:
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  trivy-scan:
+    name: Trivy Dockerfile Scan
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    needs: sonar-scan  # Ensure this job runs only after the sonar-scan job has finished
 
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Install Trivy
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.24.0/trivy_0.24.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.24.0_Linux-64bit.deb
+
+      # Scan Dockerfile for vulnerabilities
+      - name: Scan Dockerfile for vulnerabilities
+        run: |
+          trivy config --exit-code 1 --no-progress --severity HIGH,CRITICAL ./Dockerfile
   build:
     name: Build
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
