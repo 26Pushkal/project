@@ -40,14 +40,14 @@ jobs:
          # Step 1: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t first-nodejs:latest .
+          docker build -t pushkal26/first-nodejs:latest .
 
      
 
       # Step 3: Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
-          docker push first-nodejs:latest
+          docker push pushkal26/first-nodejs:latest
 
 
      
