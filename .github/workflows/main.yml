@@ -49,17 +49,7 @@ jobs:
         run: |
           docker push pushkal26/first-nodejs:latest
 
-      # Run SonarQube analysis
-      - name: SonarQube Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Store SonarQube token in GitHub Secrets
-        run: |
-          # Download and install sonar-scanner
-          curl -sS https://get.sonarsource.com/sonar-scanner-cli-linux.tar.gz | tar xz
-          ./sonar-scanner-*/bin/sonar-scanner -Dsonar.projectKey=your_project_key \
-            -Dsonar.host.url=http://http://13.232.142.172:9000 \
-            -Dsonar.login=$SONAR_TOKEN    
-
+      
 
      
 
