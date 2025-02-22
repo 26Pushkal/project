@@ -36,7 +36,7 @@ jobs:
   trivy-scan:
     name: Trivy Dockerfile Scan
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    needs: sonar-scan  # Ensure this job runs only after the sonar-scan job has finished
+    needs: [trivyscan, sonarscan] # Ensure this job runs only after the sonar-scan job has finished
 
     steps:
       # Checkout the repository
