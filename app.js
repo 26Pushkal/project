@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-// Define the route for the root URL
+// Define the route for the root URLl
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
