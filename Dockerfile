@@ -3,12 +3,14 @@ FROM node:14
 
 RUN groupadd -r admin2 && useradd -r -g admin2 admin2
 
+WORKDIR /app
+
 RUN chown -R admin2:admin2 /app
 
 USER admin2
 
 # Set the working directory in the container
-WORKDIR /app
+
 
 # Copy the application files to the container
 COPY . .
