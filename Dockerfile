@@ -16,8 +16,10 @@ USER admin2
 COPY . .
 
 # Install dependencies
+USER root
 RUN npm install
 
+USER admin2
 # Expose the port the app will run on
 EXPOSE 3000
 
