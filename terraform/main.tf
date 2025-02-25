@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-west-2"  # Update to your desired AWS region
+  region = "ap-south-1"  # Update to your desired AWS region
 }
 
 # Reference default VPC
