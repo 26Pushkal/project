@@ -33,6 +33,7 @@ jobs:
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   trivy-scan:
     name: Trivy Dockerfile Scan
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
@@ -57,10 +58,11 @@ jobs:
       - name: Scan Dockerfile for vulnerabilities
         run: |
           trivy config --exit-code 1 --severity HIGH,CRITICAL ./Dockerfile
+
   build:
     name: Build
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    needs: [sonar-scan,trivy-scan] # Ensure this job runs only after the sonar-scan job has finished
+    needs: [sonar-scan, trivy-scan] # Ensure this job runs only after the sonar-scan and trivy-scan jobs have finished
 
     steps:
       # Checkout the repository
@@ -93,3 +95,38 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push pushkal26/first-nodejs:latest
+
+  terraform:
+    name: Run Terraform
+    runs-on: ubuntu-latest  # The GitHub Action will run on an Ubuntu runner
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Checkout the repository code
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1  # Setup Terraform in the GitHub Action
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Run Terraform Plan
+        run: terraform plan
+
+      - name: Apply Terraform Configuration
+        run: terraform apply -auto-approve  # Apply the configuration without manual approval
+
+      - name: Save Kubeconfig Output
+        run: |
+          terraform output kubeconfig > ~/.kube/config
+          echo "Kubeconfig has been saved!"
+          
+      - name: Verify kubectl Access
+        run: kubectl get svc  # Verify that kubectl can access the EKS cluster
