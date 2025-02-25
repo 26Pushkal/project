@@ -120,13 +120,18 @@ jobs:
             terraform init
 
       - name: Run Terraform Plan
-        run: terraform plan
+        run: |
+             cd terraform
+             terraform plan
 
       - name: Apply Terraform Configuration
-        run: terraform apply -auto-approve  # Apply the configuration without manual approval
+        run: |
+             cd terraform
+             terraform apply -auto-approve  # Apply the configuration without manual approval
 
       - name: Save Kubeconfig Output
         run: |
+          cd terraform
           terraform output kubeconfig > ~/.kube/config
           echo "Kubeconfig has been saved!"
           
