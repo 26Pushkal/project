@@ -115,7 +115,9 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Initialize Terraform
-        run: terraform init
+        run: |
+            cd terraform
+            terraform init
 
       - name: Run Terraform Plan
         run: terraform plan
