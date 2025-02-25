@@ -7,9 +7,12 @@ data "aws_vpc" "default" {
   default = true
 }
 
-# Reference public subnets in the default VPC
+# Reference public subnets in the default VPC using filters
 data "aws_subnets" "default" {
-  vpc_id = data.aws_vpc.default.id
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
 }
 
 # Create IAM Role for the EKS cluster
@@ -29,6 +32,12 @@ resource "aws_iam_role" "eks_role" {
       }
     ]
   })
+}
+
+# Attach the AmazonEKSClusterPolicy managed policy
+resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
+  role       = aws_iam_role.eks_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
 # Create EKS Cluster using the default VPC and subnets
