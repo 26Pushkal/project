@@ -50,7 +50,3 @@ resource "aws_eks_cluster" "eks_cluster" {
   }
 }
 
-# Output the kubeconfig for kubectl
-output "kubeconfig" {
-  value = aws_eks_cluster.eks_cluster.kubeconfig
-}
